@@ -1,0 +1,52 @@
+"Games"
+{
+	"left4dead2"
+	{
+		"Addresses"
+		{
+			"PopulationKv"
+			{
+				"linux"
+				{
+					"signature" "TheDirector"
+					"read" "0"
+				}
+				"read" "852"
+			}
+		}
+
+		"Offsets"
+		{
+			"KeyValues::GetFirstSubKey"
+			{
+				"linux"		"6"
+			}
+
+			"KeyValues::GetNextKey"
+			{
+				"linux"		"5"
+			}
+		}
+
+		"Signatures"
+		{
+			"TheDirector"
+			{
+				"library"	"server"
+				"linux"		"@TheDirector"
+			}
+
+			"KeyValues::GetName"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK9KeyValues7GetNameEv"
+			}
+
+			"KeyValues::GetString"
+			{
+				"library"	"server"
+				"linux"		"@_ZN9KeyValues9GetStringEPKcS1_"
+			}
+		}
+	}
+}
