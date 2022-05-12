@@ -1,0 +1,29 @@
+"Games"
+{
+	"left4dead2"
+	{
+        "MemPatches"
+		{
+			"CSteam3Server::OnValidateAuthTicketResponseHelper::BLanOnly"
+			{
+				"signature" "CSteam3Server::OnValidateAuthTicketResponseHelper"
+
+				"linux"
+				{
+					"offset"	"6Fh"
+					"verify"	"\x74\x1F"
+					"patch"		"\xEB\x1F"
+				}
+			}
+		}
+
+		"Signatures" 
+		{
+			"CSteam3Server::OnValidateAuthTicketResponseHelper"
+			{
+				"library"	"engine"
+				"linux"		"@_ZN13CSteam3Server34OnValidateAuthTicketResponseHelperEP11CBaseClient20EAuthSessionResponse"
+			}
+		}
+	}
+}
