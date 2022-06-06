@@ -9,22 +9,37 @@ methodmap CCommand
 	* @return	Argument count.
 	* @note		Split by spaces??
 	*/
-	property int ArgC
+
+	public int ArgCount()
 	{
-		public get()
-		{
-			return LoadFromAddress(view_as<Address>(this), NumberType_Int32);
-		}
+		return LoadFromAddress(view_as<Address>(this), NumberType_Int32);
 	}
 
 	/**
-	* Get a string of all arguments. No command(0th arg) itself.
+	* Get a string of given Argument index.
+	* @note Argument index.
+	*
+	* @param argnum        Argument number to retrieve.
+	* @param buffer        Buffer to use for storing the string.
+	* @param maxlength     Maximum length of the buffer.
+	* @return              Length of string written to buffer.
+	*/
+	public int GetArg(int argnum, char[] buffer, int maxlength)
+	{
+		if (argnum < 0 || argnum >= this.ArgCount()) return 0;
+
+		Address pAdr = LoadFromAddress(view_as<Address>(this) + view_as<Address>(0x408) + view_as<Address>(argnum * 4), NumberType_Int32);
+		return LoadStringFromAddress(pAdr, buffer, maxlength);
+	}
+
+	/**
+	* Get a string of all arguments. No command itself (0th arg).
 	* 
 	* @param buffer        Buffer to use for storing the string.
 	* @param maxlength     Maximum length of the buffer.
 	* @return              Length of string written to buffer.
 	*/
-	public int GetArgString(char[] buffer, int maxlength)
+	public int GetAllArg(char[] buffer, int maxlength)
 	{
 		int iArg0Size = LoadFromAddress(view_as<Address>(this) + view_as<Address>(4), NumberType_Int32);
 
@@ -42,27 +57,30 @@ methodmap CCommand
 
 	/**
 	* Get a string of the entire command and arguments.
-	* 
+	*
 	* @param buffer        Buffer to use for storing the string.
 	* @param maxlength     Maximum length of the buffer.
 	* @return              Length of string written to buffer.
 	*/
 	public int GetCmdString(char[] buffer, int maxlength)
 	{
-		if (this.ArgC <= 0) return 0;
+		if (this.ArgCount() <= 0) return 0;
 
-		// https://github.com/nosoop/stocksoup/blob/master/memory.inc
-		
-		int i;
-		char sChar;
-		Address pAddr = view_as<Address>(this) + view_as<Address>(8);
-
-		do
-		{
-			sChar = view_as<int>(LoadFromAddress(pAddr + view_as<Address>(i), NumberType_Int8));
-			buffer[i] = sChar;
-		} while (sChar && ++i < maxlength - 1);
-
-		return i;
+		Address pAdr = view_as<Address>(this) + view_as<Address>(8);
+		return LoadStringFromAddress(pAdr, buffer, maxlength);
 	}
+}
+
+int LoadStringFromAddress(Address pAdr, char[] buffer, int maxlength)
+{
+	int i;
+	char sChar;
+
+	do
+	{
+		sChar = LoadFromAddress(pAdr + view_as<Address>(i), NumberType_Int8);
+		buffer[i] = sChar;
+	} while (sChar && ++i < maxlength - 1);
+
+	return i;
 }
